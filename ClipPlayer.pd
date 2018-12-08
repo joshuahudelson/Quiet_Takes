@@ -1,4 +1,4 @@
-#N canvas 335 81 934 687 10;
+#N canvas 332 85 934 687 10;
 #X obj 173 623 readsf~;
 #X obj 233 556 * 44100;
 #X obj 173 283 textfile;
@@ -13,7 +13,7 @@
 #X obj 173 547 del;
 #X obj 173 405 t b f b f;
 #X msg 173 575 0;
-#X msg 173 349 269.787 277.122 4;
+#X msg 173 349 1256.74 1269.48 29;
 #X msg 173 321 set \$1 \$2 \$3;
 #X obj 329 334 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
@@ -50,7 +50,6 @@
 #X obj 505 536 t f b;
 #X msg 505 564 99 \$1;
 #X obj 512 334 sqrt~;
-#X obj 512 362 sqrt~;
 #X obj 96 61 inlet;
 #X text 89 81 Change;
 #X obj 537 655 outlet~;
@@ -59,7 +58,7 @@
 #X floatatom 245 206 5 0 0 0 - - -, f 5;
 #X obj 353 224 loadbang;
 #X connect 0 0 39 0;
-#X connect 1 0 52 0;
+#X connect 1 0 51 0;
 #X connect 2 0 15 0;
 #X connect 3 0 2 0;
 #X connect 4 0 2 0;
@@ -83,11 +82,11 @@
 #X connect 16 0 14 0;
 #X connect 17 0 2 0;
 #X connect 18 0 17 0;
-#X connect 18 0 54 0;
-#X connect 19 0 53 0;
+#X connect 18 0 53 0;
+#X connect 19 0 52 0;
 #X connect 19 1 3 0;
 #X connect 20 0 19 0;
-#X connect 21 0 53 1;
+#X connect 21 0 52 1;
 #X connect 22 0 18 1;
 #X connect 23 0 25 0;
 #X connect 24 0 27 0;
@@ -104,16 +103,15 @@
 #X connect 36 0 37 0;
 #X connect 37 0 47 0;
 #X connect 38 0 35 0;
-#X connect 39 0 51 0;
+#X connect 39 0 50 0;
 #X connect 40 0 39 1;
 #X connect 43 0 40 0;
 #X connect 44 0 43 0;
 #X connect 45 0 46 0;
 #X connect 45 1 44 0;
 #X connect 46 0 43 0;
-#X connect 47 0 48 0;
-#X connect 48 0 41 0;
-#X connect 49 0 20 0;
-#X connect 52 0 0 0;
-#X connect 53 0 18 0;
-#X connect 55 0 4 0;
+#X connect 47 0 41 0;
+#X connect 48 0 20 0;
+#X connect 51 0 0 0;
+#X connect 52 0 18 0;
+#X connect 54 0 4 0;
