@@ -1,4 +1,4 @@
-#N canvas 43 81 450 300 10;
+#N canvas 43 85 450 300 10;
 #X obj 135 150 textfile;
 #X msg 147 122 rewind;
 #X obj 135 94 until;
@@ -9,6 +9,7 @@
 #X obj 232 42 loadbang;
 #X obj 136 239 outlet;
 #X obj 192 240 outlet;
+#X obj 356 42 inlet;
 #X connect 0 0 5 0;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
@@ -19,3 +20,4 @@
 #X connect 5 1 9 0;
 #X connect 6 0 4 0;
 #X connect 7 0 3 0;
+#X connect 10 0 0 0;
