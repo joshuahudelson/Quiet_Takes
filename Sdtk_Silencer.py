@@ -9,17 +9,23 @@ class Sdtk_Silencer:
     """
 
     def __init__(self, wavefile,
-                 window_width = 5000,
-                 hop_size = 5,
-                 min_silence_samples = 130000,
-                 rms_threshold = 0.01):
+                 window_width = 10000,
+                 hop_size = 50,
+                 min_silence_samples = 140000,
+                 rms_threshold = 0.008,
+                 maxamp = 0.7):
 
         self.filename = wavefile
         self.raw = scipy.io.wavfile.read(wavefile)[1]/float(32768)
         self.rawlen = len(self.raw)
+        self.maxamp = maxamp
 
         self.window_width = window_width
-        self.hop_size = hop_size
+        if hop_size > window_width:
+            print("Hop size truncated to window width!")
+            self.hop_size = window_width
+        else:
+            self.hop_size = hop_size
         self.min_silence_samples = min_silence_samples
         self.rms_threshold = rms_threshold
         self.in_loop = None
@@ -27,7 +33,7 @@ class Sdtk_Silencer:
         self.silence_labels = []
 
     def get_rms(self, segment):
-        return np.sqrt(np.mean(np.square(segment)))
+        return np.sqrt(np.mean(segment))
 
     def generate_silence_labels(self):
 
@@ -35,14 +41,14 @@ class Sdtk_Silencer:
         start_point = None
         end_point = None
 
+        current_segment = self.raw[0:self.window_width]
+        current_seg_square = np.square(current_segment)
+
         for hop in range(int((self.rawlen - self.window_width) / self.hop_size)):
 
-            windowstart = hop * self.hop_size
-            current_segment = self.raw[windowstart:windowstart + self.window_width]
+            RMS = self.get_rms(current_seg_square)
 
-            RMS = self.get_rms(current_segment)
-
-            if RMS < self.rms_threshold:
+            if (RMS < self.rms_threshold) & (np.amax(current_seg_square) < self.maxamp):
                 if self.in_loop:
                     pass
                 else:
@@ -60,6 +66,14 @@ class Sdtk_Silencer:
                         start_point = None
                         end_point = None
                         self.in_loop = False
+                else:
+                    pass
+
+            current_seg_square = current_seg_square[self.hop_size:]
+            x = ((hop + 1) * self.hop_size) + (self.window_width - self.hop_size)
+            newvalues = self.raw[x : (x + self.hop_size)]
+            newvalues_square = np.square(newvalues)
+            current_seg_square = np.concatenate((current_seg_square, newvalues_square), axis=0)
 
         if self.in_loop:
             end_point = self.rawlen
@@ -69,7 +83,7 @@ class Sdtk_Silencer:
         return(self.silence_labels)
 
     def export_text_file(self):
-        textfile = open(self.filename + "_Labels", "w")
+        textfile = open(self.filename[:-4] + "_Labels.txt", "w")
         for entry in self.silence_labels:
             textfile.write(str(entry[0]/float(44100)) + "\t" + str(entry[1]/float(44100)) + "\n")
         textfile.close()
