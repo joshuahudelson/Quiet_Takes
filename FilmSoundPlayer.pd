@@ -1,7 +1,7 @@
-#N canvas 443 92 874 649 10;
+#N canvas 422 92 874 649 10;
 #X obj 64 41 inlet;
 #X obj 64 483 readsf~;
-#X obj 124 416 * 44100;
+#X obj 124 406 * 44100;
 #X obj 84 298 -;
 #X floatatom 84 326 5 0 0 0 - - -, f 5;
 #X obj 84 351 abs;
@@ -36,10 +36,14 @@
 #X obj 446 593 outlet;
 #X obj 592 458 sqrt~;
 #X obj 592 484 sqrt~;
-#X msg 124 446 open SilenceMonoTen.wav \$1;
+#X obj 224 339 r soundfilename;
+#X msg 124 456 open \$2.wav \$1;
+#X obj 124 431 pack f s;
+#X obj 135 538 print 2:;
+#X obj 208 369 t b a;
 #X connect 0 0 9 0;
 #X connect 1 0 18 0;
-#X connect 2 0 37 0;
+#X connect 2 0 39 0;
 #X connect 3 0 4 0;
 #X connect 4 0 5 0;
 #X connect 5 0 6 0;
@@ -77,4 +81,9 @@
 #X connect 33 0 34 0;
 #X connect 35 0 36 0;
 #X connect 36 0 20 0;
-#X connect 37 0 1 0;
+#X connect 37 0 41 0;
+#X connect 38 0 1 0;
+#X connect 38 0 40 0;
+#X connect 39 0 38 0;
+#X connect 41 0 2 0;
+#X connect 41 1 39 1;
