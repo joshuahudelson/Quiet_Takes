@@ -1,4 +1,4 @@
-#N canvas 104 182 450 488 10;
+#N canvas 101 186 450 488 10;
 #X obj 58 245 gemhead;
 #X obj 58 219 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
@@ -24,7 +24,8 @@
 #X obj 200 158 * 25;
 #X text 185 183 frame #;
 #X obj 30 22 loadbang;
-#X msg 30 98 symbol /home/joshua/Desktop/Bergman_El_silencio.mp4;
+#X msg 30 98 symbol /home/joshua/Desktop/Github_Repos/Silencer/Bergman_El_silencio.mp4
+;
 #X connect 0 0 2 0;
 #X connect 1 0 0 0;
 #X connect 2 0 11 0;
