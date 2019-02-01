@@ -1,4 +1,4 @@
-#N canvas 101 186 450 488 10;
+#N canvas 89 202 482 488 10;
 #X obj 58 245 gemhead;
 #X obj 58 219 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
@@ -14,18 +14,15 @@
 1;
 #X obj 147 368 outlet;
 #X obj 58 168 loadbang;
-#X obj 200 32 inlet;
-#X obj 250 152 inlet;
-#X obj 147 139 inlet;
 #X text 120 122 film location;
-#X text 294 152 auto-play;
-#X text 199 14 label;
 #X obj 200 73 unpack f f f;
 #X obj 200 158 * 25;
 #X text 185 183 frame #;
 #X obj 30 22 loadbang;
 #X msg 30 98 symbol /home/joshua/Desktop/Github_Repos/Silencer/Bergman_El_silencio.mp4
 ;
+#X obj 250 152 r autoplay;
+#X obj 200 32 r startpoint-\$1;
 #X connect 0 0 2 0;
 #X connect 1 0 0 0;
 #X connect 2 0 11 0;
@@ -38,10 +35,9 @@
 #X connect 9 0 2 0;
 #X connect 10 0 9 0;
 #X connect 12 0 1 0;
-#X connect 13 0 19 0;
-#X connect 14 0 10 0;
-#X connect 15 0 3 0;
-#X connect 19 0 20 0;
-#X connect 20 0 8 0;
-#X connect 22 0 23 0;
-#X connect 23 0 3 0;
+#X connect 14 0 15 0;
+#X connect 15 0 8 0;
+#X connect 17 0 18 0;
+#X connect 18 0 3 0;
+#X connect 19 0 10 0;
+#X connect 20 0 14 0;
