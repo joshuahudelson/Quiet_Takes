@@ -1,4 +1,4 @@
-#N canvas 389 108 874 649 10;
+#N canvas 316 120 874 649 10;
 #X obj 64 483 readsf~;
 #X obj 124 406 * 44100;
 #X obj 84 298 -;
@@ -23,7 +23,7 @@
 #X msg 446 424 0;
 #X obj 396 396 t f b;
 #X msg 396 424 99 \$1;
-#X obj 377 559 outlet~;
+#X obj 378 593 outlet~;
 #X obj 23 561 outlet;
 #X text 11 578 get new input;
 #X obj 23 528 f \$1;
@@ -39,6 +39,10 @@
 #X obj 64 166 r startpoint-\$1;
 #X obj 102 197 r endpoint-\$1;
 #X obj 84 379 * 1000;
+#X obj 289 426 r volume-\$1;
+#X msg 289 454 \$1 200;
+#X obj 289 512 line~;
+#X obj 377 552 *~;
 #X connect 0 0 16 0;
 #X connect 1 0 35 0;
 #X connect 2 0 3 0;
@@ -61,7 +65,7 @@
 #X connect 13 0 14 0;
 #X connect 14 0 31 0;
 #X connect 15 0 12 0;
-#X connect 16 0 24 0;
+#X connect 16 0 43 0;
 #X connect 17 0 16 1;
 #X connect 20 0 17 0;
 #X connect 21 0 20 0;
@@ -83,3 +87,7 @@
 #X connect 38 0 2 1;
 #X connect 39 0 6 1;
 #X connect 39 0 22 0;
+#X connect 40 0 41 0;
+#X connect 41 0 42 0;
+#X connect 42 0 43 1;
+#X connect 43 0 24 0;

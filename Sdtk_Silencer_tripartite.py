@@ -8,32 +8,72 @@ class Sdtk_Silencer:
     """ Whatever it is.
     """
 
-    def __init__(self, wavefile,
-                 window_width = 10000,
-                 hop_size = 50,
-                 min_silence_samples = 140000,
-                 rms_threshold = 0.008,
-                 maxamp = 0.7):
+    def __init__(self,
+                 wavefile,
+                 min_samples = 150000,
+                 ):
 
         self.filename = wavefile
         self.raw = scipy.io.wavfile.read(wavefile)[1]/float(32768)
         self.rawlen = len(self.raw)
+
         self.maxamp = maxamp
 
-        self.window_width = window_width
-        if hop_size > window_width:
-            print("Hop size truncated to window width!")
-            self.hop_size = window_width
-        else:
-            self.hop_size = hop_size
-        self.min_silence_samples = min_silence_samples
-        self.rms_threshold = rms_threshold
-        self.in_loop = None
+        self.min_samples = min_samples
 
+        self.subsegment_percentages = subsegment_percentages
+        self.rms_ratios = rms_ratios
+        self.hopsize_percentages = hopsize_percentages
+
+        self.in_loop = None
         self.silence_labels = []
+
+
+    def run_analysis(self):
+        level = 0
+        hopsize = self.min_samples * hopsize_percentages[level]
+        num_hops = ((self.rawlen - self.min_samples) / hopsize) + 1
+        start_point = 0
+        for hop in range(num_hops):
+            endpoint = ((hopsize * hop) + self.min_samples - 1))
+            if endpoint > len(segment):
+                endpoint = len(segment)-1
+            current_segment = self.raw[hop*hopsize:endpoint]
+            current_rms = self.get_rms(current_segment)
+            result = self.check_segment(level+1, np.square(current_segment), current_rms)
+            if result == False:
+                if endpoint-start_point-self.min_samples >= min_samples:
+                    self.add_to_silence_labels(start_point, endpoint(previous one...))
+                    start_point = endpoint
+                else:
+                    start_point = endpoint
+
+        finally: if still going, make this a label, too...
+
+
+    def check_segment(self, level, segment, reference_rms):
+        current_rms = self.get_rms(segment)
+        if ((current_rms / reference_rms) < rms_ratios[level]):
+            if level < self.max_level:
+                subsegment_length = int(segment * self.subsegment_percentages[level])
+                hopsize = int(subsegment_length * self.hopsize_percentages[level])
+                num_hops = ((len(segment) - subsegment_length)/hopsize) + 1
+                for hop in range(num_hops):
+                    endpoint = ((hopsize * hop) + subsegment_length - 1))
+                    if endpoint > len(segment):
+                        endpoint = len(segment)-1
+                    if (self.check_segment(level+1, segment[(hopsize*hop):endpoint], current_rms)) == False:
+                        return False
+                return True
+            else:
+                return True
+        else:
+            return False
+
 
     def get_rms(self, segment):
         return np.sqrt(np.mean(segment))
+
 
     def generate_silence_labels(self):
 

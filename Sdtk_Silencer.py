@@ -11,9 +11,9 @@ class Sdtk_Silencer:
     def __init__(self, wavefile,
                  window_width = 10000,
                  hop_size = 50,
-                 min_silence_samples = 140000,
+                 min_silence_samples = 130000,
                  rms_threshold = 0.008,
-                 maxamp = 0.7):
+                 maxamp = 0.4):
 
         self.filename = wavefile
         self.raw = scipy.io.wavfile.read(wavefile)[1]/float(32768)
@@ -97,6 +97,6 @@ class Sdtk_Silencer:
         textfile.close()
 
 if __name__== '__main__':
-    myvar = Sdtk_Silencer("SilenceTenMono.wav")
+    myvar = Sdtk_Silencer("BergmanSilence.wav")
     myvar.generate_silence_labels()
     myvar.export_text_file()
