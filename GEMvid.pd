@@ -1,4 +1,4 @@
-#N canvas 62 90 1304 659 10;
+#N canvas 67 90 1641 908 10;
 #X msg 10 67 0 \, destroy;
 #X obj 10 11 Gem;
 #X obj 10 123 gemwin;
@@ -100,7 +100,7 @@
 #X obj 986 345 FilmSoundPlayer 3;
 #X msg 985 116 symbol BergmanSilence;
 #X obj 324 630 pix_record;
-#X obj 1051 655 pix_record;
+#X obj 1065 653 pix_record;
 #X msg 1010 609 bang;
 #X msg 1044 579 auto \$1;
 #X obj 1046 559 tgl 15 0 empty empty empty 0 -6 0 8 -262144 -1 -1 0
@@ -142,13 +142,9 @@
 #X connect 6 0 7 2;
 #X connect 6 0 74 0;
 #X connect 7 0 14 0;
-#X connect 8 0 103 2;
-#X connect 9 0 30 2;
 #X connect 10 0 11 2;
 #X connect 10 0 74 1;
 #X connect 11 0 14 1;
-#X connect 12 0 104 2;
-#X connect 13 0 105 2;
 #X connect 14 0 5 0;
 #X connect 15 0 14 2;
 #X connect 16 0 20 0;
@@ -166,28 +162,11 @@
 #X connect 20 0 21 0;
 #X connect 21 0 23 0;
 #X connect 22 0 21 0;
-#X connect 22 1 29 1;
 #X connect 23 0 17 0;
-#X connect 24 0 85 0;
-#X connect 24 0 103 1;
-#X connect 24 1 85 1;
 #X connect 27 0 28 0;
-#X connect 28 0 30 0;
-#X connect 28 0 103 0;
-#X connect 28 0 104 0;
-#X connect 28 0 105 0;
 #X connect 29 0 23 1;
 #X connect 29 1 23 2;
 #X connect 30 0 7 1;
-#X connect 31 0 30 1;
-#X connect 31 0 84 0;
-#X connect 31 1 84 1;
-#X connect 36 0 79 0;
-#X connect 36 0 104 1;
-#X connect 36 1 79 1;
-#X connect 40 0 86 0;
-#X connect 40 0 105 1;
-#X connect 40 1 86 1;
 #X connect 44 0 45 0;
 #X connect 45 0 6 0;
 #X connect 46 0 10 0;

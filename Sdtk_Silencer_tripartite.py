@@ -2,22 +2,28 @@
 
 import numpy as np
 import scipy.io.wavfile
+import copy
 
 
 class Sdtk_Silencer:
-    """ Whatever it is.
+    """ Class for generating a text list of start points, end points and
+        average RMS (root mean squar) values for portions of audio within a
+        .wav file that are (relatively) quiet and smooth (that is,
+        the ratio of small-scale RMS values to large-scale rms values is
+        below some threshold).
     """
 
     def __init__(self,
                  wavefile,
-                 min_samples = 150000,
+                 min_samples,
+                 subsegment_percentages = [.1, .1, .1],
+                 rms_ratios = [.5, .5, .5],
+                 hopsize_percentages = [.3, .3, .3]
                  ):
 
         self.filename = wavefile
         self.raw = scipy.io.wavfile.read(wavefile)[1]/float(32768)
         self.rawlen = len(self.raw)
-
-        self.maxamp = maxamp
 
         self.min_samples = min_samples
 
@@ -28,41 +34,73 @@ class Sdtk_Silencer:
         self.in_loop = None
         self.silence_labels = []
 
+        if (len(self.subsegment_percentages) == len(self.hopsize_percentages) == len(self.rms_ratios)):
+            self.max_level = len(self.subsegment_percentages) - 1
+
 
     def run_analysis(self):
+        """ Iterate through successive min_samples-sized windows of the full
+            audio file and recursively examine subsegments to ensure that
+            the subsegment rms values are below some threshold defined by the
+            larger segment rms value.  If so, export large segment start and end
+            points, as well as rms average.
+        """
         level = 0
-        hopsize = self.min_samples * hopsize_percentages[level]
-        num_hops = ((self.rawlen - self.min_samples) / hopsize) + 1
+        hopsize = int(self.min_samples * self.hopsize_percentages[level])
+        num_hops = int((self.rawlen - self.min_samples) / hopsize) + 1
         start_point = 0
+        rms_records = []
+        end_point = None
+
         for hop in range(num_hops):
-            endpoint = ((hopsize * hop) + self.min_samples - 1))
-            if endpoint > len(segment):
-                endpoint = len(segment)-1
-            current_segment = self.raw[hop*hopsize:endpoint]
+            print("loop " + str(hop))
+            end_point = ((hopsize * hop) + self.min_samples - 1)
+            if end_point >= self.min_samples:
+                end_point = self.min_samples - 1
+            current_segment = np.square(self.raw[hop * hopsize:end_point])
+            current_rms = self.get_rms(current_segment)
+            rms_records.append(current_rms)
+            result = self.check_segment(level+1, np.square(current_segment), current_rms)
+            minimum_met = False
+
+            if result == False:
+                if minimum_met:
+                    self.silence_labels.append([start_point,
+                                                (end_point - self.min_samples),
+                                                np.mean(rms_records)])
+                    start_point = end_point
+                    minimum_met = False
+                else:
+                    start_point = end_point
+            else:
+                end_point += self.min_samples
+                minimum_met = True
+
+        if end_point < self.rawlen-1:
+            end_point = self.rawlen-1
+            current_segment = self.raw[start_point:end_point]
             current_rms = self.get_rms(current_segment)
             result = self.check_segment(level+1, np.square(current_segment), current_rms)
-            if result == False:
-                if endpoint-start_point-self.min_samples >= min_samples:
-                    self.add_to_silence_labels(start_point, endpoint(previous one...))
-                    start_point = endpoint
-                else:
-                    start_point = endpoint
+            if result:
+                self.silence_labels.append([start_point,
+                                           (end_point - self.min_samples),
+                                           np.mean(rms_records)])
 
-        finally: if still going, make this a label, too...
+        print("Finished analysis.")
 
 
     def check_segment(self, level, segment, reference_rms):
         current_rms = self.get_rms(segment)
-        if ((current_rms / reference_rms) < rms_ratios[level]):
+        if ((current_rms / reference_rms) < self.rms_ratios[level]):
             if level < self.max_level:
-                subsegment_length = int(segment * self.subsegment_percentages[level])
+                subsegment_length = int(len(segment) * self.subsegment_percentages[level])
                 hopsize = int(subsegment_length * self.hopsize_percentages[level])
-                num_hops = ((len(segment) - subsegment_length)/hopsize) + 1
+                num_hops = int((len(segment) - subsegment_length)/hopsize) + 1
                 for hop in range(num_hops):
-                    endpoint = ((hopsize * hop) + subsegment_length - 1))
-                    if endpoint > len(segment):
-                        endpoint = len(segment)-1
-                    if (self.check_segment(level+1, segment[(hopsize*hop):endpoint], current_rms)) == False:
+                    end_point = ((hopsize * hop) + subsegment_length - 1)
+                    if end_point > len(segment):
+                        end_point = len(segment)-1
+                    if (self.check_segment(level+1, segment[(hopsize*hop):end_point], current_rms)) == False:
                         return False
                 return True
             else:
@@ -75,60 +113,18 @@ class Sdtk_Silencer:
         return np.sqrt(np.mean(segment))
 
 
-    def generate_silence_labels(self):
-
-        self.in_loop = False
-        start_point = None
-        end_point = None
-
-        current_segment = self.raw[0:self.window_width]
-        current_seg_square = np.square(current_segment)
-
-        for hop in range(int((self.rawlen - self.window_width) / self.hop_size)):
-
-            RMS = self.get_rms(current_seg_square)
-
-            if (RMS < self.rms_threshold) & (np.amax(current_seg_square) < self.maxamp):
-                if self.in_loop:
-                    pass
-                else:
-                    self.in_loop = True
-                    start_point = (hop * self.hop_size)
-            else:
-                if self.in_loop:
-                    if ((hop * self.hop_size) - start_point) >= self.min_silence_samples:
-                        end_point = ((hop - 1) * self.hop_size)
-                        self.silence_labels.append([start_point, end_point])
-                        start_point = None
-                        end_point = None
-                        self.in_loop = False
-                    else:
-                        start_point = None
-                        end_point = None
-                        self.in_loop = False
-                else:
-                    pass
-
-            current_seg_square = current_seg_square[self.hop_size:]
-            x = ((hop + 1) * self.hop_size) + (self.window_width - self.hop_size)
-            newvalues = self.raw[x : (x + self.hop_size)]
-            newvalues_square = np.square(newvalues)
-            current_seg_square = np.concatenate((current_seg_square, newvalues_square), axis=0)
-
-        if self.in_loop:
-            end_point = self.rawlen
-            if start_point - end_point >= self.min_silence_samples:
-                self.silence_labels.append([start_point, end_point])
-
-        return(self.silence_labels)
-
     def export_text_file(self):
         textfile = open(self.filename[:-4] + "_Labels.txt", "w")
         for entry in self.silence_labels:
-            textfile.write(str(entry[0]/float(44100)) + "\t" + str(entry[1]/float(44100)) + "\n")
+            textfile.write(str(entry[0]/float(44100)) + "\t" +
+                           str(entry[1]/float(44100)) + "\t" +
+                           str(entry[2]))
         textfile.close()
 
+
+#-------------------------------------------------------------------------------
+
 if __name__== '__main__':
-    myvar = Sdtk_Silencer("SilenceTenMono.wav")
-    myvar.generate_silence_labels()
+    myvar = Sdtk_Silencer("snooptest.wav", 44100, [.3, .3, .3], [1, 1, 1], [.1, .1, .1])
+    myvar.run_analysis()
     myvar.export_text_file()
