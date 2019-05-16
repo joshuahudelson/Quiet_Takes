@@ -17,7 +17,7 @@ class Sdtk_Silencer:
                  wavefile,
                  min_samples,
                  subsegment_percentages = [.5, .5, .5],
-                 rms_ratios = [1, 1, 1],
+                 rms_ratios = [0.5, 0.5, 0.5],
                  hopsize_percentages = [.5, .5, .5]
                  ):
 
