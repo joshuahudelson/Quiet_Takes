@@ -4,9 +4,14 @@ import librosa
 import wave
 import os
 
+RMS_max = 0.025
+FLAT_min = 0.007
+min_seconds_for_record = 4
+
+
 # Load the example clip
 
-film_name = "Clip1.wav"
+film_name = "The_Silence.wav"
 the_clip, sr = librosa.load(film_name)
 
 num_samps = len(the_clip)
@@ -40,12 +45,7 @@ print("FLAT min: " + str(min(flat_vals1[0])))
 startpoint = 0
 in_recording = False
 
-min_seconds_for_record = 2
 min_windows_for_record = (sr * min_seconds_for_record)/(hop_length_rms)
-
-
-RMS_max = 0.03
-FLAT_min = 0.005
 
 
 for index in range(len(rms_vals1[0])):

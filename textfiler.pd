@@ -1,4 +1,4 @@
-#N canvas 280 336 798 389 10;
+#N canvas 79 335 798 389 10;
 #X obj 177 254 textfile;
 #X msg 247 198 rewind;
 #X obj 177 198 until;
@@ -14,8 +14,9 @@
 #X msg 356 189 add2 cr;
 #X obj 324 75 t b a;
 #X obj 259 305 outlet;
-#X msg 356 237 read Clip1_Labels.txt cr;
-#X msg 376 161 add2 \$1.wav_Final_Labels/\$1.wav_Final_Labels.txt;
+#X msg 356 237 read The_Silence.wav_Final_Labels/The_Silence.wav_Final_Labels.txt
+cr;
+#X msg 376 161 add2 \$1_Final_Labels/\$1_Final_Labels.txt;
 #X connect 0 0 4 0;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
