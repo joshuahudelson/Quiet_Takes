@@ -79,7 +79,7 @@ directory_name = cwd + str("/") + film_name + "_Final_Labels"
 
 print(directory_name)
 
-QTLs = open(directory_name + str("/") + film_name + "_Final_Labels", "w")
+QTLs = open(directory_name + str("/") + film_name + "_Final_Labels.txt", "w")
 
 for label_index in List_of_Labels:
     QTLs.write(label_index)
