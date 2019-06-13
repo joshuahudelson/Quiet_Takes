@@ -4,8 +4,8 @@ import librosa
 import wave
 import os
 
-RMS_max = 0.025
-FLAT_min = 0.007
+RMS_max = 0.029
+FLAT_min = 0.009
 min_seconds_for_record = 4
 
 
