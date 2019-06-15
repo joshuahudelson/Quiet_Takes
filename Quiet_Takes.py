@@ -4,9 +4,10 @@ import librosa
 import wave
 import os
 
-RMS_max = 0.029
-FLAT_min = 0.009
-min_seconds_for_record = 4
+RMS_max = 0.031
+FLAT_min = 0.005
+min_seconds_for_record = 5
+max_seconds_for_record = 8
 
 
 # Load the example clip
@@ -46,11 +47,14 @@ startpoint = 0
 in_recording = False
 
 min_windows_for_record = (sr * min_seconds_for_record)/(hop_length_rms)
+max_windows_for_record = (sr * max_seconds_for_record)/(hop_length_rms)
 
+
+len_rms_vals = len(rms_vals1[0])
 
 for index in range(len(rms_vals1[0])):
     if in_recording:
-        if (rms_vals1[0][index] > RMS_max) | (flat_vals1[0][int(rms_to_flat_hop_ratio * index)] < FLAT_min) | (index == len(rms_vals1[0])):
+        if (rms_vals1[0][index] > RMS_max) | (flat_vals1[0][int(rms_to_flat_hop_ratio * index)] < FLAT_min) | (index == len_rms_vals) | ((index - startpoint) >= max_windows_for_record):
             if (index - startpoint) >= min_windows_for_record:
                 List_of_Labels.append(str(((startpoint + 2) * hop_length_rms)/float(sr)) + "\t" +
                                           str(((index - 2) * hop_length_rms)/float(sr)) + "\t" +

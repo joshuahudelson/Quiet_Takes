@@ -1,4 +1,4 @@
-#N canvas 308 160 1152 853 10;
+#N canvas 234 160 1152 853 10;
 #X obj 279 328 pix_gain;
 #X obj 279 703 pix_texture;
 #X obj 279 732 rectangle 6 4;
@@ -56,8 +56,11 @@
 #X obj 869 269 VidPlayer 2;
 #X obj 495 230 FilmSoundPlayer_2 1, f 32;
 #X obj 795 230 FilmSoundPlayer_2 2, f 32;
+#X obj 279 765 pix_record;
+#X obj 370 747 r pixrecord;
 #X connect 0 0 25 0;
 #X connect 1 0 2 0;
+#X connect 2 0 54 0;
 #X connect 3 0 22 0;
 #X connect 4 0 25 1;
 #X connect 5 0 21 0;
@@ -134,3 +137,4 @@
 #X connect 52 1 5 0;
 #X connect 53 0 34 0;
 #X connect 53 1 6 0;
+#X connect 55 0 54 0;

@@ -23,6 +23,7 @@
 #X obj 406 27 inlet;
 #X obj 306 598 outlet;
 #X obj 189 215 t b f;
+#X obj 592 397 outlet;
 #X connect 0 0 8 0;
 #X connect 1 0 3 0;
 #X connect 2 0 4 0;
@@ -37,6 +38,7 @@
 #X connect 7 1 14 2;
 #X connect 7 2 15 0;
 #X connect 8 0 9 0;
+#X connect 8 0 24 0;
 #X connect 9 0 11 0;
 #X connect 9 1 7 0;
 #X connect 10 0 11 0;
