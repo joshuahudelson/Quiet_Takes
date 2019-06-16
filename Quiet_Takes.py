@@ -12,7 +12,7 @@ max_seconds_for_record = 8
 
 # Load the example clip
 
-film_name = "The_Silence.wav"
+film_name = "Persona.wav"
 the_clip, sr = librosa.load(film_name)
 
 num_samps = len(the_clip)
